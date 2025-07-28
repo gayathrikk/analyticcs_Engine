@@ -21,123 +21,155 @@ import io.restassured.response.Response;
 public class analyticsengine {
 	 private RemoteWebDriver driver;
 
-	    @BeforeTest
-	    public void setup() throws MalformedURLException {
-	        ChromeOptions options = new ChromeOptions();
-	        URL url = new URL("http://172.20.23.92:4444/wd/hub");
-	        driver = new RemoteWebDriver(url, options);
-	        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	    }
+		@BeforeTest
 
-	    @Test(priority = 1)
-	    public void login() throws InterruptedException {
-	        driver.get("http://apollo2.humanbrain.in/");
-	        driver.manage().window().maximize();
-	        System.out.println("The server is opened successfully");
+		public void setup() throws Exception
+		{
+		DesiredCapabilities dc = DesiredCapabilities.chrome();
+		       URL url = new URL("http://172.20.23.92:4444/wd/hub");
+		       driver = new RemoteWebDriver(url, dc);
+		       wait = new WebDriverWait(driver, 10);
+		}
 
-	        WebDriverWait wait = new WebDriverWait(driver, 50);
-	        try {
-	            // Viewer Section
-	            WebElement viewerSectionLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@src='/viewer/assets/images/colorsvg/gallery.svg']")));
-	            viewerSectionLink.click();
-	            System.out.println("The Viewer Icon is clicked");
+		  @Test(priority = 1)
+			public void login() throws InterruptedException {
+			driver.get("https://apollo2.humanbrain.in/viewer/annotation/portal");
+			driver.manage().window().maximize();
+			String currentURL = driver.getCurrentUrl();
+			System.out.println("Current URL: " + currentURL);
+			WebDriverWait wait = new WebDriverWait(driver, 60);
+			driver.switchTo().defaultContent(); // Switch back to default content
+			WebElement viewerElement = wait
+			.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='Viewer']")));
+			if (viewerElement.isEnabled() && viewerElement.isDisplayed()) {
+			viewerElement.click();
+			System.out.println("Viewer icon is clicked");
+			} else {
+			System.out.println("Viewer icon is not clickable");
+			}
 
-	            // Login
-	            String parentWindow = driver.getWindowHandle();
-	            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()=' Log In ']")));
-	            loginButton.click();
+			String parentWindow = driver.getWindowHandle();
+			WebElement loginButton = wait
+			.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()=' Log In ']")));
+			if (loginButton != null) {
+			loginButton.click();
+			System.out.println("Login button clicked successfully.");
+			} else {
+			System.out.println("Login button is not clicked.");
+			}
 
-	            Set<String> allWindows = driver.getWindowHandles();
-	            for (String window : allWindows) {
-	                if (!window.equals(parentWindow)) {
-	                    driver.switchTo().window(window);
-	                    break;
-	                }
-	            }
+			wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+			Set<String> allWindows = driver.getWindowHandles();
+			for (String window : allWindows) {
+			if (!window.equals(parentWindow)) {
+			driver.switchTo().window(window);
+			break;
+			}
+			}
+			WebElement emailInput = wait
+			.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
+			if (emailInput != null && emailInput.isDisplayed()) {
+			emailInput.sendKeys("teamsoftware457@gmail.com");
+			System.out.println("Email was entered successfully.");
+			} else {
+			System.out.println("Email was not entered.");
+			}
 
-	            // Enter Credentials
-	            WebElement emailInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
-	            emailInput.sendKeys("softwaretestingteam9@gmail.com");
+			WebElement nextButton1 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Next']")));
+			if (nextButton1 != null) {
+			nextButton1.click();
+			System.out.println("Next button 1 is clicked.");
+			} else {
+			System.out.println("Next button 1 is not clicked.");
+			}
 
-	            WebElement nextButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Next']")));
-	            nextButton.click();
+			WebElement passwordInput = wait.until(
+			ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@aria-label='Enter your password']")));
+			passwordInput.sendKeys("Health#123");
+			if (passwordInput.getAttribute("value").equals("Health#123")) {
+			System.out.println("Password was entered successfully.");
+			} else {
+			System.out.println("Password was not entered.");
+			}
 
-	            WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='password']")));
-	            passwordInput.sendKeys("Health#123");
+			WebElement nextButton2 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Next']")));
+			if (nextButton2 != null) {
+			nextButton2.click();
+			System.out.println("Next button 2 is clicked.");
+			} else {
+			System.out.println("Next button 2 is not clicked.");
+			}
 
-	            WebElement nextButton2 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Next']")));
-	            nextButton2.click();
+			driver.switchTo().window(parentWindow);
+			System.out.println("Login successfully");
 
-	            driver.switchTo().window(parentWindow);
-	            Thread.sleep(5000);
-	        } catch (Exception e) {
-	            System.err.println("An error occurred during login: " + e.getMessage());
-	        }
-	    }
+			System.out.println("************************Login validation done***********************");
+			Thread.sleep(5000);
+			}
 
-	    @Test(priority = 2)
-	    public void analyticsEngine() throws InterruptedException {
-	    	try {
-	    	    WebDriverWait wait = new WebDriverWait(driver, 30);
+		  @Test(priority = 2)
+		    public void analyticsEngine() throws InterruptedException {
+		    	try {
+		    	    WebDriverWait wait = new WebDriverWait(driver, 30);
 
-	    	    // Click Analytics Engine
-	    	    WebElement analyticsIcon = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@src='/viewer/assets/images/colorsvg/analytics_engine.svg']")));
-	    	    analyticsIcon.click();
-	    	    System.out.println("Analytics Engine icon clicked successfully.");
+		    	    // Click Analytics Engine
+		    	    WebElement analyticsIcon = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@src='/viewer/assets/images/colorsvg/analytics_engine.svg']")));
+		    	    analyticsIcon.click();
+		    	    System.out.println("Analytics Engine icon clicked successfully.");
 
-	    	    // Call saveSearchHistory API
-	    	    System.out.println("Calling saveSearchHistory API...");
-	    	    Response saveSearchResponse = RestAssured.given()
-	    	        .post("https://apollo2.humanbrain.in/analytics/saveSearchHistory");
-	    	    System.out.println("saveSearchHistory API Response: " + saveSearchResponse.getStatusCode() + " - " + saveSearchResponse.getBody().asString());
+		    	    // Call saveSearchHistory API
+		    	    System.out.println("Calling saveSearchHistory API...");
+		    	    Response saveSearchResponse = RestAssured.given()
+		    	        .post("https://apollo2.humanbrain.in/analytics/saveSearchHistory");
+		    	    System.out.println("saveSearchHistory API Response: " + saveSearchResponse.getStatusCode() + " - " + saveSearchResponse.getBody().asString());
 
-	    	    // Enter Query
-	    	    WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='text']")));
-	    	    searchBox.sendKeys("greater than 10\n");
-	    	    Thread.sleep(5000);
-	    	    System.out.println("The Query is entered successfully");
+		    	    // Enter Query
+		    	    WebElement searchBox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='text']")));
+		    	    searchBox.sendKeys("greater than 10\n");
+		    	    Thread.sleep(5000);
+		    	    System.out.println("The Query is entered successfully");
 
-	    	    // Call db_query API
-	    	    System.out.println("Calling db_query API...");
-	    	    Response dbQueryResponse = RestAssured.given()
-	    	        .queryParam("query", "greater than 10")
-	    	        .get("https://apollo2.humanbrain.in/analyticsengine/db_query");
-	    	    System.out.println("db_query API Response: " + dbQueryResponse.getStatusCode() + " - " + dbQueryResponse.getBody().asString());
+		    	    // Call db_query API
+		    	    System.out.println("Calling db_query API...");
+		    	    Response dbQueryResponse = RestAssured.given()
+		    	        .queryParam("query", "greater than 10")
+		    	        .get("https://apollo2.humanbrain.in/analyticsengine/db_query");
+		    	    System.out.println("db_query API Response: " + dbQueryResponse.getStatusCode() + " - " + dbQueryResponse.getBody().asString());
 
-	    	    // Validate Text 'Fetal brain 34'
-	    	    WebElement resultTextElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//td[text()='Fetal brain 34'])[1]")));
-	    	    String actualText = resultTextElement.getText();
-	    	    String expectedText = "Fetal brain 34";
+		    	    // Validate Text 'Fetal brain 34'
+		    	    WebElement resultTextElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='MTB3']")));
+		    	    String actualText = resultTextElement.getText();
+		    	    String expectedText = "MTB3";
 
-	    	    if (!actualText.equals(expectedText)) {
-	    	        throw new AssertionError("Validation failed! Expected text: '" + expectedText + "', but found: '" + actualText + "'");
-	    	    }
-	    	    System.out.println("Validation passed: 'Fetal brain 34' text is displayed correctly.");
+		    	    if (!actualText.equals(expectedText)) {
+		    	        throw new AssertionError("Validation failed! Expected text: '" + expectedText + "', but found: '" + actualText + "'");
+		    	    }
+		    	    System.out.println("Validation passed: 'MTB3' text is displayed correctly.");
 
-	    	    // Download Button
-	    	    WebDriverWait wait3 = new WebDriverWait(driver, 60);
-	    	    WebElement download = wait3.until(ExpectedConditions.elementToBeClickable(By.xpath("(//img[@src='/viewer/assets/images/colorsvg/download.svg'])[1]")));
-	    	    download.click();
-	    	    System.out.println("Download button clicked successfully.");
+		    	    // Download Button
+		    	    WebDriverWait wait3 = new WebDriverWait(driver, 60);
+		    	    WebElement download = wait3.until(ExpectedConditions.elementToBeClickable(By.xpath("(//img[@src='/viewer/assets/images/colorsvg/download.svg'])[1]")));
+		    	    download.click();
+		    	    System.out.println("Download button clicked successfully.");
 
-	    	    // Call getSearchHistory API
-	    	    System.out.println("Calling getSearchHistory API...");
-	    	    Response searchHistoryResponse = RestAssured.given()
-	    	        .queryParam("user_id", "193")
-	    	        .get("https://apollo2.humanbrain.in/analytics/getSearchHistory");
-	    	    System.out.println("getSearchHistory API Response: " + searchHistoryResponse.getStatusCode() + " - " + searchHistoryResponse.getBody().asString());
+		    	    // Call getSearchHistory API
+		    	    System.out.println("Calling getSearchHistory API...");
+		    	    Response searchHistoryResponse = RestAssured.given()
+		    	        .queryParam("user_id", "193")
+		    	        .get("https://apollo2.humanbrain.in/analytics/getSearchHistory");
+		    	    System.out.println("getSearchHistory API Response: " + searchHistoryResponse.getStatusCode() + " - " + searchHistoryResponse.getBody().asString());
 
-	    	} catch (AssertionError e) {
-	    	    System.err.println("Test case failed: " + e.getMessage());
-	    	    throw e; // Rethrow the assertion error to mark the test as failed
-	    	} catch (Exception e) {
-	    	    System.err.println("An error occurred in AnalyticsEngine test: " + e.getMessage());
-	    	}}
-	    @AfterTest
-	    public void tearDown() {
-	        if (driver != null) {
-	            driver.quit();
-	            System.out.println("Browser closed successfully");
-	        }
-	    }
-	}
+		    	} catch (AssertionError e) {
+		    	    System.err.println("Test case failed: " + e.getMessage());
+		    	    throw e; // Rethrow the assertion error to mark the test as failed
+		    	} catch (Exception e) {
+		    	    System.err.println("An error occurred in AnalyticsEngine test: " + e.getMessage());
+		    	}}
+		    @AfterTest
+		    public void tearDown() {
+		        if (driver != null) {
+		            driver.quit();
+		            System.out.println("Browser closed successfully");
+		        }
+		    }
+		}
