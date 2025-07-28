@@ -19,7 +19,10 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 public class analyticsengine {
-	 private RemoteWebDriver driver;
+	
+		private RemoteWebDriver driver;
+		private WebDriverWait wait;
+
 
 		@BeforeTest
 
