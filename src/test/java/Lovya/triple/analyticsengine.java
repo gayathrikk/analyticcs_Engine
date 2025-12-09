@@ -41,17 +41,7 @@ public class analyticsengine {
 			String currentURL = driver.getCurrentUrl();
 			System.out.println("Current URL: " + currentURL);
 			WebDriverWait wait = new WebDriverWait(driver, 60);
-			//driver.switchTo().defaultContent(); // Switch back to default content
-			// WebElement viewerElement = wait
-			// .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='Viewer']")));
-			// if (viewerElement.isEnabled() && viewerElement.isDisplayed()) {
-			// viewerElement.click();
-			// System.out.println("Viewer icon is clicked");
-			// } else {
-			// System.out.println("Viewer icon is not clickable");
-			// }
-
-			// String parentWindow = driver.getWindowHandle();
+		
 			WebElement loginButton = wait
 			.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='auth-button']")));
 			if (loginButton != null) {
@@ -61,14 +51,6 @@ public class analyticsengine {
 			System.out.println("Login button is not clicked.");
 			}
 
-			// wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-			// Set<String> allWindows = driver.getWindowHandles();
-			// for (String window : allWindows) {
-			// if (!window.equals(parentWindow)) {
-			// driver.switchTo().window(window);
-			// break;
-			// }
-			// }
 			WebElement emailInput = wait
 			.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
 			if (emailInput != null && emailInput.isDisplayed()) {
@@ -111,7 +93,6 @@ public class analyticsengine {
             System.out.println("continuebutton is not clicked.");
         }
 
-			//driver.switchTo().window(parentWindow);
 			System.out.println("Login successfully");
 
 			System.out.println("************************Login validation done***********************");
