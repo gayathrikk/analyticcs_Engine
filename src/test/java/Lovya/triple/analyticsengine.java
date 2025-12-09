@@ -41,7 +41,7 @@ public class analyticsengine {
 			String currentURL = driver.getCurrentUrl();
 			System.out.println("Current URL: " + currentURL);
 			WebDriverWait wait = new WebDriverWait(driver, 60);
-			driver.switchTo().defaultContent(); // Switch back to default content
+			//driver.switchTo().defaultContent(); // Switch back to default content
 			// WebElement viewerElement = wait
 			// .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='Viewer']")));
 			// if (viewerElement.isEnabled() && viewerElement.isDisplayed()) {
