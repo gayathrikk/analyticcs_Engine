@@ -29,7 +29,7 @@ public class analyticsengine {
 		public void setup() throws Exception
 		{
 		DesiredCapabilities dc = DesiredCapabilities.chrome();
-		       URL url = new URL("http://172.20.23.92:4444/wd/hub");
+		       URL url = new URL("http://172.22.0.5:4444/wd/hub");
 		       driver = new RemoteWebDriver(url, dc);
 		       wait = new WebDriverWait(driver, 10);
 		}
@@ -42,18 +42,18 @@ public class analyticsengine {
 			System.out.println("Current URL: " + currentURL);
 			WebDriverWait wait = new WebDriverWait(driver, 60);
 			driver.switchTo().defaultContent(); // Switch back to default content
-			WebElement viewerElement = wait
-			.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='Viewer']")));
-			if (viewerElement.isEnabled() && viewerElement.isDisplayed()) {
-			viewerElement.click();
-			System.out.println("Viewer icon is clicked");
-			} else {
-			System.out.println("Viewer icon is not clickable");
-			}
+			// WebElement viewerElement = wait
+			// .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@title='Viewer']")));
+			// if (viewerElement.isEnabled() && viewerElement.isDisplayed()) {
+			// viewerElement.click();
+			// System.out.println("Viewer icon is clicked");
+			// } else {
+			// System.out.println("Viewer icon is not clickable");
+			// }
 
-			String parentWindow = driver.getWindowHandle();
+			// String parentWindow = driver.getWindowHandle();
 			WebElement loginButton = wait
-			.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()=' Log In ']")));
+			.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class='auth-button']")));
 			if (loginButton != null) {
 			loginButton.click();
 			System.out.println("Login button clicked successfully.");
@@ -61,14 +61,14 @@ public class analyticsengine {
 			System.out.println("Login button is not clicked.");
 			}
 
-			wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-			Set<String> allWindows = driver.getWindowHandles();
-			for (String window : allWindows) {
-			if (!window.equals(parentWindow)) {
-			driver.switchTo().window(window);
-			break;
-			}
-			}
+			// wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+			// Set<String> allWindows = driver.getWindowHandles();
+			// for (String window : allWindows) {
+			// if (!window.equals(parentWindow)) {
+			// driver.switchTo().window(window);
+			// break;
+			// }
+			// }
 			WebElement emailInput = wait
 			.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
 			if (emailInput != null && emailInput.isDisplayed()) {
@@ -103,7 +103,15 @@ public class analyticsengine {
 			System.out.println("Next button 2 is not clicked.");
 			}
 
-			driver.switchTo().window(parentWindow);
+			WebElement continuebutton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Continue']")));
+            if (continuebutton != null) {
+            continuebutton.click();
+            System.out.println("continuebutton is clicked.");
+            } else {
+            System.out.println("continuebutton is not clicked.");
+        }
+
+			//driver.switchTo().window(parentWindow);
 			System.out.println("Login successfully");
 
 			System.out.println("************************Login validation done***********************");
