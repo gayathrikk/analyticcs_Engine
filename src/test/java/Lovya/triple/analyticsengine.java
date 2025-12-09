@@ -28,10 +28,10 @@ public class analyticsengine {
 
 		public void setup() throws Exception
 		{
-		DesiredCapabilities dc = DesiredCapabilities.chrome();
-		       URL url = new URL("http://172.22.0.5:4444/wd/hub");
-		       driver = new RemoteWebDriver(url, dc);
-		       wait = new WebDriverWait(driver, 10);
+				DesiredCapabilities dc = DesiredCapabilities.chrome();
+		        URL url = new URL("http://172.22.0.5:4444/wd/hub");
+		    	driver = new RemoteWebDriver(url, dc);
+		        wait = new WebDriverWait(driver, 10);
 		}
 
 		  @Test(priority = 1)
